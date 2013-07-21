@@ -9,8 +9,6 @@ import java.util.Date;
 import org.hackedio.wristio.bluetooth.BluetoothManager;
 import org.hackedio.wristio.util.BluetoothUtil;
 
-import android.content.Context;
-
 public class TwitterWristManager extends Thread {
 	
 	private BluetoothManager manager;

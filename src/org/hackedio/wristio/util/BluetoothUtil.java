@@ -1,7 +1,6 @@
 package org.hackedio.wristio.util;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
