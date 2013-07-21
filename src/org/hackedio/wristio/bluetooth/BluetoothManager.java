@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.hackedio.wristio.twitter.TwitterWristManager;
+
 import android.bluetooth.BluetoothSocket;
 
 //Copied from http://developer.android.com/guide/topics/connectivity/bluetooth.html#Permissions (ConnectedThread)
@@ -32,6 +34,10 @@ public class BluetoothManager extends Thread{
     }
  
     public void run() {
+    	
+    	TwitterWristManager twm = new TwitterWristManager();
+    	twm.start();
+    	
         // Keep listening to the InputStream until an exception occurs
         while (enabled) {
         	try {
@@ -42,7 +48,7 @@ public class BluetoothManager extends Thread{
 			}
         }
     }
- 
+
     /* Call this from the main activity to send data to the remote device */
     public void write(byte[] bytes) {
         try {

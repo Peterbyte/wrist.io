@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.hackedio.wristio.bluetooth.BluetoothManager;
+import org.hackedio.wristio.twitter.TwitterManager;
+import org.hackedio.wristio.twitter.TwitterWristManager;
 import org.hackedio.wristio.util.AlertUtil;
 import org.hackedio.wristio.util.BluetoothUtil;
 
@@ -77,6 +79,7 @@ private static final String NOTFICATION_DEVICE_ADDRESS = "00:13:04:10:10:76";
 					socket.connect();
 					manager = new BluetoothManager(socket);
 					manager.start();
+					
 				}
 				BluetoothUtil.sendMessage(this, manager, 7, 250, "TESTING STUFF");
 			} catch (IOException e) {
