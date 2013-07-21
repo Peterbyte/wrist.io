@@ -49,6 +49,7 @@ public class BluetoothUtil {
 			mgr.write(sb.toString().getBytes("UTF-8"));
 		}
 		catch(Exception e){
+			if(context != null)
 			AlertUtil.alertMessage(context, "An error ocurred attempting to communicate with the Notification device");
 			Log.i("error", "An error ocurred attempting to communicate with the Notification device", e);
 			e.printStackTrace();

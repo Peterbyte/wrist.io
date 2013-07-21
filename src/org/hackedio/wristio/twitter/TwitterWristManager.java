@@ -1,23 +1,55 @@
 package org.hackedio.wristio.twitter;
 
-import java.util.Calendar;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
+
+import org.hackedio.wristio.bluetooth.BluetoothManager;
+import org.hackedio.wristio.util.BluetoothUtil;
+
+import android.content.Context;
 
 public class TwitterWristManager extends Thread {
 	
-	private boolean enable = true;	
+	private BluetoothManager manager;
+	private boolean enable = true;
+	
+	public TwitterWristManager(BluetoothManager manager) {
+		this.manager = manager;
+	}
+	
 	@Override
 	public void run() {
-		Calendar cal = Calendar.getInstance();
-
+		Date previousTime = new Date();
 		try {
 			while(enable){
-				Thread.sleep(60000);
+				Thread.sleep(1000);
 				
-				
+				Date currentTime = new Date();
+				if(currentTime.getTime()-previousTime.getTime() > 60000){
+					previousTime = currentTime;
+					
+					URL url = new URL("https://github.com/Peterbyte/wrist.io");
+					URLConnection yc = url.openConnection();
+					BufferedReader in = new BufferedReader(new InputStreamReader(
+                            yc.getInputStream()));
+					String inputLine;
+					StringBuffer sb = new StringBuffer();
+					while ((inputLine = in.readLine()) != null){
+						sb.append(inputLine);
+						if(sb.length()>140){
+							break;
+						}
+					}
+					in.close();
+					
+					BluetoothUtil.sendMessage(null, manager, 2, 600, sb.subSequence(0, 140).toString().replaceAll("\n", ""));
+				}
 			}
 			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

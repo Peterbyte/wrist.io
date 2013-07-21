@@ -1,7 +1,6 @@
 package org.hackedio.wristio.bluetooth;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.hackedio.wristio.twitter.TwitterWristManager;
@@ -35,7 +34,7 @@ public class BluetoothManager extends Thread{
  
     public void run() {
     	
-    	TwitterWristManager twm = new TwitterWristManager();
+    	TwitterWristManager twm = new TwitterWristManager(this);
     	twm.start();
     	
         // Keep listening to the InputStream until an exception occurs

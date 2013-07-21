@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.hackedio.wristio.bluetooth.BluetoothManager;
-import org.hackedio.wristio.twitter.TwitterManager;
-import org.hackedio.wristio.twitter.TwitterWristManager;
 import org.hackedio.wristio.util.AlertUtil;
 import org.hackedio.wristio.util.BluetoothUtil;
 
