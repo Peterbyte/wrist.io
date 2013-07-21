@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+import org.hackedio.wristio.bluetooth.BluetoothManager;
+
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -35,7 +37,7 @@ public class BluetoothUtil {
 		return socket;
 	}
 	
-	public static void sendMessage(Context context, OutputStream stream, Integer numPulses, Integer pulseDuration, String displayText){
+	public static void sendMessage(Context context, BluetoothManager mgr, Integer numPulses, Integer pulseDuration, String displayText){
 		try{
 			StringBuffer sb = new StringBuffer();
 			sb.append(numPulses);
@@ -43,8 +45,7 @@ public class BluetoothUtil {
 			sb.append(pulseDuration);
 			sb.append(",");
 			sb.append(displayText);
-			stream.write(sb.toString().getBytes("UTF-8"));
-			stream.flush();
+			mgr.write(sb.toString().getBytes("UTF-8"));
 		}
 		catch(Exception e){
 			AlertUtil.alertMessage(context, "An error ocurred attempting to communicate with the Notification device");

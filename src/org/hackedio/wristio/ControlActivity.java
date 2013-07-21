@@ -3,6 +3,7 @@ package org.hackedio.wristio;
 import java.io.IOException;
 import java.util.Set;
 
+import org.hackedio.wristio.bluetooth.BluetoothManager;
 import org.hackedio.wristio.util.AlertUtil;
 import org.hackedio.wristio.util.BluetoothUtil;
 
@@ -21,7 +22,13 @@ private static final String NOTFICATION_DEVICE_ADDRESS = "00:13:04:10:10:76";
 	
 	private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
-	private BluetoothSocket socket;
+	private BluetoothManager manager;
+	
+	private BluetoothAdapter bluetoothAdapter;
+	
+	private BluetoothDevice notificationDevice;
+	
+	private boolean initDone = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +55,30 @@ private static final String NOTFICATION_DEVICE_ADDRESS = "00:13:04:10:10:76";
 //	}
 
 	public void doDisconnect(View view){//View is null when called from doDestroy, fix if required.
-		if(socket != null && socket.isConnected())
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		manager.cancel();
 	}
 	
 	public void doVibrate(View view){
-		//Init bluetooth if required
-		BluetoothAdapter bluetoothAdapter = initDeviceBluetooth();
-		
-		//Obtain bonded device
-		//TODO: handle more than one bonded device
-		BluetoothDevice notificationDevice = getPairedDevice(bluetoothAdapter, NOTFICATION_DEVICE_ADDRESS);
+		if(!initDone){
+			//Init bluetooth if required
+			bluetoothAdapter = initDeviceBluetooth();
+			
+			//Obtain bonded device
+			//TODO: handle more than one bonded device
+			notificationDevice = getPairedDevice(bluetoothAdapter, NOTFICATION_DEVICE_ADDRESS);
+			initDone = true;
+		}
 		
 		if(notificationDevice != null){
-			bluetoothAdapter.cancelDiscovery();
 			try {
-				if(socket == null || !socket.isConnected()){
-					socket = BluetoothUtil.createBluetoothSocket(notificationDevice);
+				if(manager == null || !manager.isAlive() || !manager.isEnabled()){
+					bluetoothAdapter.cancelDiscovery();
+					BluetoothSocket socket = BluetoothUtil.createBluetoothSocket(notificationDevice);
 					socket.connect();
+					manager = new BluetoothManager(socket);
+					manager.start();
 				}
-				BluetoothUtil.sendMessage(this, socket.getOutputStream(), 7, 250, "TESTING STUFF");
+				BluetoothUtil.sendMessage(this, manager, 7, 250, "TESTING STUFF");
 			} catch (IOException e) {
 				AlertUtil.alertMessage(this, "An error ocurred attempting to communicate with the Notification device");
 				Log.i("error", "An error ocurred attempting to communicate with the Notification device", e);
