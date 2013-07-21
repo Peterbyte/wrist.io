@@ -81,7 +81,7 @@ private static final String NOTFICATION_DEVICE_ADDRESS = "00:13:04:10:10:76";
 					manager.start();
 					
 				}
-				BluetoothUtil.sendMessage(this, manager, 7, 250, "TESTING STUFF");
+				BluetoothUtil.sendMessage(this, manager, 3, 250, "TESTING STUFF");
 			} catch (IOException e) {
 				AlertUtil.alertMessage(this, "An error ocurred attempting to communicate with the Notification device");
 				Log.i("error", "An error ocurred attempting to communicate with the Notification device", e);

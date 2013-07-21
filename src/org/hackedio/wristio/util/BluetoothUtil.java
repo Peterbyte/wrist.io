@@ -44,7 +44,8 @@ public class BluetoothUtil {
 			sb.append(",");
 			sb.append(pulseDuration);
 			sb.append(",");
-			sb.append(displayText);
+			sb.append(displayText.replaceAll("\n", " "));
+			sb.append("\n");
 			mgr.write(sb.toString().getBytes("UTF-8"));
 		}
 		catch(Exception e){
